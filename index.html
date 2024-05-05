@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <style>
+        body{
+            background-color: #f2f2f2;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        .heading{
+            margin:0 18;
+            font-size: 63px;
+            padding: 12px;
+        }
+        table {
+            z-index: -1;
+            margin: auto;
+            border: 2px solid black;
+            max-height: 70vh;
+            max-width: 70vh;
+            height: 70vh;
+            width: 70vh;
+            font-family: Arial, sans-serif;
+            border-radius: 23px;
+            box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
+        }
+        td, tr {
+            border-radius: 23px 23px;
+            border: 2px solid rgb(69, 65, 65);
+        }
+        
+        td {
+            cursor: pointer;
+            width: 100px;
+            height: 100px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 80px;  
+        }
+        .game{
+            display: none;
+            user-select: none;
+            z-index: 10;
+            position: absolute;
+            top: 55%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: larger;
+            font-weight: bold;
+            background-color: #c330308d;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 10px;
+            max-height:70vh;
+            height: 50vh;
+            width: 50vh;
+            cursor: move;
+            max-width: 70vh;
+            border-radius: 23px;
+        }
+        .head{
+            font-size: 40px;
+            padding: 12px;
+        }
+        .win{
+            font-size: 30px;
+        }
+        button{
+            position: relative;
+            top:50%;
+            font-size: 20px;
+            padding: 10px;
+            border-radius: 23px;
+        }
+        button:hover{
+            background-color: #c33030;
+            color: #f2f2f2;
+        }
+        @media (max-width: 768px) {
+            table{
+                max-height: 50vh;
+                max-width: 50vh;
+                height: 50vh;
+                width: 50vh;X	
+            }
+            td {
+                width: 80px;
+                height: 80px;
+                font-size: 60px;
+            }
+            .heading{
+                margin:0 18;
+                font-size: 53px;
+                padding: 12px;
+            }
+            .game{
+                max-height:33vh;
+                max-width: 33vh;
+                position: relative;
+                top: 45%;
+                width: 60%;
+                height: 33%;
+            }
+            .head{
+                font-size: 30px;
+                padding: 12px;
+            }
+            button{
+                position: relative;
+                top:40%;
+                font-size: 15px;
+                padding: 10px;
+                border-radius: 23px;
+            }
+            .win{
+                font-size: 16px;
+            }
+        }
+        @media (max-width: 480px) {
+            table{
+                font-size: 43px;
+                padding: 12px;
+            }
+            .game{
+                max-height:33vh;
+                max-width: 33vh;
+                position: fixed;
+                top: 40%;
+                width: 60%;
+                height: 30%;
+            }
+            .head{
+                font-size: 30px;
+                padding: 12px;
+            }
+            button{
+                position: relative;
+                top:40%;
+                font-size: 15px;
+                padding: 10px;
+                border-radius: 23px;
+            }
+            .win{
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1 class="heading">Tic Tac Toe</h1>
+    <!-- UI for tictactoe -->
+    <div class="new"></div>
+    <div id="game" class="game">
+        <div class="head">Game over</div>
+        <div id ="win"class="win">Winner is :</div>
+        <button type="submit" onclick="location.reload()">Restart</button>
+    </div>
+    <table>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    </table>
+    <script>
+        
+        var player = 'X';
+        var board = [
+            ['', '', ''],
+            ['', '', ''],
+            ['', '', '']
+        ];
+        var emptyCells = 9;
+        var winningCombinations = [
+            [0, 1, 2],
+            [3, 4, 5],
+            [6, 7, 8],
+            [0, 3, 6],
+            [1, 4, 7],
+            [2, 5, 8],
+            [0, 4, 8],
+            [2, 4, 6]
+        ];
+        var gameOver = false;
+
+        $(document).ready(function() {
+            $('td').click(function() {
+                // Check if the game is over
+                if (gameOver) {
+                    $('#game').css('display', 'block');
+                    $('#win').text('Game over!');
+                    return;
+                }
+                
+                var row = $(this).parent().index();
+                var col = $(this).index();
+                if (board[row][col] === '') {
+                    emptyCells--;
+                    board[row][col] = player;
+                    $(this).text(player);
+                    $(this).css('color', (player === 'X') ? 'blue' : 'red');
+                    // Check for a winner
+                    var winner = checkWinner();
+                    if (winner) {
+                        $('#game').css('display', 'block');
+                        $('#win').text($('#win').text()+player);
+                        gameOver = true;
+                        return;
+                    } else if (emptyCells === 0) {
+                        $('#game').css('display', 'block');
+                        $('#win').text('Its a tie!');
+                        gameOver = true;
+                        return;
+                    }
+                    
+                    // Switch player
+                    player = (player === 'X') ? 'O' : 'X';
+                } else {
+                    alert('This cell is already occupied!');
+                }
+            });
+        });
+        
+        function checkWinner() {
+            for (var i = 0; i < winningCombinations.length; i++) {
+                var combination = winningCombinations[i];
+                var a = board[Math.floor(combination[0] / 3)][combination[0] % 3];
+                var b = board[Math.floor(combination[1] / 3)][combination[1] % 3];
+                var c = board[Math.floor(combination[2] / 3)][combination[2] % 3];
+                if (a !== '' && a === b && b === c) {
+                    return a;
+                }
+            }
+            return null;
+        }   
+        document.querySelector('.game').addEventListener('drag', function(event) {
+            // Update element position along with mouse movement
+            this.style.left = event.clientX + 'px';
+            this.style.top = event.clientY + 'px';
+        });
+    </script>
+</body>
+</html>
