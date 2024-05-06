@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator</title>
+    <style>
+    .calculator {
+    width: 690px;
+    margin: 50px auto;
+    border: 1px solid #ccc;
+    border-radius: 25px;
+    padding: 20px;
+    background-color: rgba(0, 0, 0, 0.944);
+    overflow: auto;
+    box-shadow: 10px 12px 4px rgba(0, 0, 0, 0.2);
+    border-color: rgba(255, 0, 0, 0.855);
+    border-width: 3px;
+}
+input[type="text"] {
+    width: 81%;
+    margin: 23px;
+    color: #ffffff;
+    border-radius: 23px;
+    font-size: 24px;
+    margin-bottom: 59px;
+    padding: 35px;
+    font-size: 46px;
+    border: none;
+    font-weight: 600;
+    background-color: rgba(140, 135, 135, 0.944);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    border-color: rgba(255, 0, 0, 0.855);
+    text-align: right;
+}
+
+.keys {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 5px;
+}
+
+button {
+    font-size: 36px;
+    height: 125px;
+    width: 125px;
+    border: none;
+    font-style: italic;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    cursor: pointer;
+    font-weight: bold;
+    text-align: center;
+    color: #ffffff;
+    align-items: center;
+    border-radius: 50%;
+    font-weight: 600;
+    background-color: rgb(29, 29, 26);
+    box-shadow: 0 2px 4px rgba(101, 99, 99, 0.2);
+}
+
+button:hover {
+    background-color: #eee;
+    color: black;
+}
+
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <input type="text" id="result" disabled>
+        <div class="keys">
+            <button style="color: rgba(249, 241, 80, 0.855);"onclick="clearOneResult()">AC</button>
+            <button style="color: rgba(216, 238, 75, 0.855);"onclick="clearResult()">C</button>
+            <button style="color: rgba(255, 0, 0, 0.855);"onclick="appendToResult('%')">%</button>
+            <button style="color: rgba(255, 0, 0, 0.855);"onclick="appendToResult('/')">/</button>
+            <button onclick="appendToResult('7')">7</button>
+            <button onclick="appendToResult('8')">8</button>
+            <button onclick="appendToResult('9')">9</button>
+            <button style="color: rgba(255, 0, 0, 0.855);"onclick="appendToResult('*')">*</button>
+            <button onclick="appendToResult('4')">4</button>
+            <button onclick="appendToResult('5')">5</button>
+            <button onclick="appendToResult('6')">6</button>
+            <button style="color: rgba(255, 0, 0, 0.855);"onclick="appendToResult('+')">+</button>
+            <button onclick="appendToResult('1')">1</button>
+            <button onclick="appendToResult('2')">2</button>
+            <button onclick="appendToResult('3')">3</button>
+            <button style="color: rgba(255, 0, 0, 0.855);"onclick="appendToResult('-')">-</button>
+            <button onclick="appendToResult('-')">&#xB1;</button>
+            <button onclick="appendToResult('0')">0</button>
+            <button onclick="appendToResult('.')">.</button>
+            <button style="background-color: rgba(255, 0, 0, 0.855);"onclick="calculate()">=</button>
+        </div>
+    </div>
+<script>
+    const backgroundColors = [
+  "#FF0000", // Red
+  "#00FF00", // Green
+  "#0000FF", // Blue
+  "#FFFF00", // Yellow
+  "#FFA500", // Orange
+  "#800080", // Purple
+  "#FFC0CB", // Pink
+  "#00FFFF", // Cyan
+  "#FFD700", // Gold
+  "#8A2BE2", // BlueViolet
+  "#FF6347"  // Tomato
+];
+function myFunction() {
+document.getElementsByTagName("body")[0].style.backgroundColor = backgroundColors[Math.floor(Math.random() * backgroundColors.length)];
+}
+setInterval(myFunction, 10000);
+function appendToResult(value) {
+    document.getElementById('result').value += value;
+}
+
+function clearResult() {
+    document.getElementById('result').value = '';
+}
+function clearOneResult() {
+    var result = document.getElementById('result').value;
+    result = result.slice(0, -1);
+    document.getElementById('result').value = result;
+}
+
+function calculate() {
+    let result = eval(document.getElementById('result').value);
+    document.getElementById('result').value = result;
+}
+
+</script></body>
+</html>
